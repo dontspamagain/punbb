@@ -61,6 +61,9 @@ function generate_config_file()
 	$config_body .= "\n\n// Disable forum output buffering by removing // from the following line\n//define('FORUM_DISABLE_BUFFERING', 1);";
 	$config_body .= "\n\n// Disable forum async JS loader by removing // from the following line\n//define('FORUM_DISABLE_ASYNC_JS_LOADER', 1);";
 	$config_body .= "\n\n// Disable forum extensions version check by removing // from the following line\n//define('FORUM_DISABLE_EXTENSIONS_VERSION_CHECK', 1);";
+	$config_body .= "\n\n// SQLite3 busy timeout -> after waiting for that time we get 'db is locked' error (in msec)\n//define('FORUM_SQLITE3_BUSY_TIMEOUT', 10000);";
+	$config_body .= "\n\n// SQLite3 WAL mode has better control over concurrency. Source: https://www.sqlite.org/wal.html\n//define('FORUM_SQLITE3_WAL_ON', 1);";
+
 
 	return $config_body;
 }

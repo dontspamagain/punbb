@@ -777,11 +777,11 @@ function do_bbcode($text, $is_signature = false)
 	$pattern[] = '#\[colou?r=([a-zA-Z]{3,20}|\#[0-9a-fA-F]{6}|\#[0-9a-fA-F]{3})](.*?)\[/colou?r\]#ms';
 	$pattern[] = '#\[h\](.*?)\[/h\]#ms';
 
-	$replace[] = '<strong>$matches[1]</strong>';
-	$replace[] = '<em>$matches[1]</em>';
-	$replace[] = '<span class=\"bbu\">$matches[1]</span>';
-	$replace[] = '<span style=\"color: $matches[1]\">$matches[2]</span>';
-	$replace[] = '</p><h5>$matches[1]</h5><p>';
+	$replace[] = '<strong>$1</strong>';
+	$replace[] = '<em>$1</em>';
+	$replace[] = '<span class="bbu">$1</span>';
+	$replace[] = '<span style="color:$1">$2</span>';
+	$replace[] = '</p><h5>$1</h5><p>';
 
 	if (($is_signature && $forum_config['p_sig_img_tag'] == '1') || (!$is_signature && $forum_config['p_message_img_tag'] == '1'))
 	{
@@ -805,8 +805,8 @@ function do_bbcode($text, $is_signature = false)
 	$pattern[] = '#\[email\]([^\[]*?)\[/email\]#';
 	$pattern[] = '#\[email=([^\[]+?)\](.*?)\[/email\]#';
 
-	$replace[] = '<a href=\"mailto:$matches[1]\">$matches[1]</a>';
-	$replace[] = '<a href=\"mailto:$matches[1]\">$matches[2]</a>';
+	$replace[] = '<a href="mailto:$1">$1</a>';
+	$replace[] = '<a href="mailto:$1">$2</a>';
 
 	$return = ($hook = get_hook('ps_do_bbcode_replace')) ? eval($hook) : null;
 	if ($return !== null)

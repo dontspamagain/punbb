@@ -61,15 +61,13 @@ class DBLayer
 
 		if (!$this->link_id)
 			error('Unable to open database \''.$db_name.'\'. SQLite reported: '.$sqlite_error, __FILE__, __LINE__);
-		else
-			return $this->link_id;
 	}
 
 	function __destruct()
 	{
 	    $this->close();
 	}
-	
+
 	function start_transaction()
 	{
 		++$this->in_transaction;

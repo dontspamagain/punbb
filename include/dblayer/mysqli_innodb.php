@@ -47,15 +47,13 @@ class DBLayer
 		// Setup the client-server character set (UTF-8)
 		if (!defined('FORUM_NO_SET_NAMES'))
 			$this->set_names('utf8');
-
-		return $this->link_id;
 	}
 
 	function __destruct()
 	{
 	    $this->close();
 	}
-	
+
 	function start_transaction()
 	{
 		++$this->in_transaction;
@@ -266,10 +264,10 @@ class DBLayer
 		    {
 		        if (defined('FORUM_SHOW_QUERIES') || defined('FORUM_DEBUG'))
 		            $this->saved_queries[] = array('COMMIT', 0);
-		    
+
 		        @mysqli_query($this->link_id, 'COMMIT');
 		    }
-		    		    
+
 			if ($this->query_result)
 				@mysqli_free_result($this->query_result);
 

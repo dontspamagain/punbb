@@ -1746,7 +1746,7 @@ else
 		'p_sig_img_tag'				=> "'0'",
 		'p_sig_length'				=> "'400'",
 		'p_sig_lines'				=> "'4'",
-		'p_allow_banned_email'		=> "'1'",
+		'p_allow_banned_email'		=> "'0'",
 		'p_allow_dupe_email'		=> "'0'",
 		'p_force_guest_email'		=> "'1'",
 		'o_show_moderators'			=> "'0'",

@@ -1050,12 +1050,12 @@ function get_title($user)
 		}
 	}
 
-	// If the user has a custom title
-	if ($user['title'] != '')
-		$user_title = forum_htmlencode($forum_config['o_censoring'] == '1' ? censor_words($user['title']) : $user['title']);
 	// If the user is banned
-	else if (in_array(utf8_strtolower($user['username']), $ban_list))
+	if (in_array(utf8_strtolower($user['username']), $ban_list))
 		$user_title = $lang_common['Banned'];
+	// If the user has a custom title
+	else if ($user['title'] != '')
+		$user_title = forum_htmlencode($forum_config['o_censoring'] == '1' ? censor_words($user['title']) : $user['title']);
 	// If the user group has a default user title
 	else if ($user['g_user_title'] != '')
 		$user_title = forum_htmlencode($user['g_user_title']);

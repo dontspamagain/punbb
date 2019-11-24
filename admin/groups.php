@@ -544,7 +544,7 @@ else if (isset($_GET['del_group']))
 
 	($hook = get_hook('agr_del_group_qr_get_group_member_count')) ? eval($hook) : null;
 	$result = $forum_db->query_build($query) or error(__FILE__, __LINE__);
-	$group_info = $forum_db->fetch_row($result);
+	$group_info = $forum_db->fetch_assoc($result);
 
 	// If the group doesn't have any members or if we've already selected a group to move the members to
 	if (!$group_info || isset($_POST['del_group']))

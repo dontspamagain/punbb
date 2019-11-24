@@ -483,23 +483,15 @@ else
 		// Check InnoDB support in DB
 		if (in_array($db_type, array('mysql_innodb', 'mysqli_innodb')))
 		{
-			$result = $forum_db->query('SHOW VARIABLES LIKE \'have_innodb\'');
-			$row = $forum_db->fetch_assoc($result);
-
-			if (!$row || !isset($row['Value']) || strtolower($row['Value']) != 'yes')
+			$found_innodb = false;
+			$result = $forum_db->query("SHOW ENGINES");
+			while ($row = $forum_db->fetch_assoc($result))
 			{
-				// check InnoDB support for new mysql versions
-				$result = $forum_db->query("SHOW ENGINES");
-				$found_innodb = false;
-				while ($row = $forum_db->fetch_assoc($result)) {
-					if ($row["Engine"] == "InnoDB") {
-						$found_innodb = true;
-					}
-				}
-				if (!$found_innodb) {
-					error($lang_install['MySQL InnoDB Not Supported']);
-				}
+				if ($row['Engine'] == 'InnoDB' && in_array($row['Support'], array('YES', 'DEFAULT')))
+					$found_innodb = true;
 			}
+			if (!$found_innodb)
+				error($lang_install['InnoDB Not Supported']);
 		}
 	}
 

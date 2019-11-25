@@ -18,8 +18,7 @@ if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) AND strtolower($_SERVER['HTTP_X_REQ
 require FORUM_ROOT.'include/constants.php';
 
 // Record the start time (will be used to calculate the generation time for the page)
-list($usec, $sec) = explode(' ', microtime());
-$forum_start = empty($_SERVER['REQUEST_TIME_FLOAT']) ? (float) $usec + (float) $sec : (float) $_SERVER['REQUEST_TIME_FLOAT'];
+$forum_start = empty($_SERVER['REQUEST_TIME_FLOAT']) ? microtime(true) : (float) $_SERVER['REQUEST_TIME_FLOAT'];
 
 // Load the functions script
 require FORUM_ROOT.'include/functions.php';

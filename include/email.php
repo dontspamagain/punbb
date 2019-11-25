@@ -132,6 +132,7 @@ function server_parse($socket, $expected_response)
 function smtp_mail($to, $subject, $message, $headers = '')
 {
 	global $forum_config;
+	static $local_host;
 
 	$recipients = explode(',', $to);
 
@@ -156,9 +157,23 @@ function smtp_mail($to, $subject, $message, $headers = '')
 
 	server_parse($socket, '220');
 
+	if (!isset($local_host))
+	{
+		// Here we try to determine the *real* hostname (reverse DNS entry preferably)
+		$local_host = php_uname('n');
+
+		// Able to resolve name to IP
+		if (($local_addr = @gethostbyname($local_host)) !== $local_host)
+		{
+			// Able to resolve IP back to name
+			if (($local_name = @gethostbyaddr($local_addr)) !== $local_addr)
+				$local_host = $local_name;
+		}
+	}
+
 	if ($forum_config['o_smtp_user'] != '' && $forum_config['o_smtp_pass'] != '')
 	{
-		fwrite($socket, 'EHLO '.$smtp_host."\r\n");
+		fwrite($socket, 'EHLO '.$local_host."\r\n");
 		server_parse($socket, '250');
 
 		fwrite($socket, 'AUTH LOGIN'."\r\n");
@@ -172,7 +187,7 @@ function smtp_mail($to, $subject, $message, $headers = '')
 	}
 	else
 	{
-		fwrite($socket, 'HELO '.$smtp_host."\r\n");
+		fwrite($socket, 'HELO '.$local_host."\r\n");
 		server_parse($socket, '250');
 	}
 

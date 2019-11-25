@@ -19,7 +19,7 @@ require FORUM_ROOT.'include/constants.php';
 
 // Record the start time (will be used to calculate the generation time for the page)
 list($usec, $sec) = explode(' ', microtime());
-$forum_start = ((float)$usec + (float)$sec);
+$forum_start = empty($_SERVER['REQUEST_TIME_FLOAT']) ? (float) $usec + (float) $sec : (float) $_SERVER['REQUEST_TIME_FLOAT'];
 
 // Load the functions script
 require FORUM_ROOT.'include/functions.php';

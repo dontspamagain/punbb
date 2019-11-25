@@ -52,7 +52,7 @@ class DBLayer
 
 	function __destruct()
 	{
-	    $this->close();
+		$this->close();
 	}
 
 	function start_transaction()
@@ -260,15 +260,15 @@ class DBLayer
 	{
 		if ($this->link_id)
 		{
-		    if ($this->in_transaction)
-		    {
-		        if (defined('FORUM_SHOW_QUERIES') || defined('FORUM_DEBUG'))
-		            $this->saved_queries[] = array('COMMIT', 0);
+			if ($this->in_transaction)
+			{
+				if (defined('FORUM_SHOW_QUERIES') || defined('FORUM_DEBUG'))
+					$this->saved_queries[] = array('COMMIT', 0);
 
 				--$this->in_transaction;
 
 				@mysqli_query($this->link_id, 'COMMIT');
-		    }
+			}
 
 			if ($this->query_result)
 				@mysql_free_result($this->query_result);

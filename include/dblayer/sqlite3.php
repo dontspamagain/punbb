@@ -68,7 +68,7 @@ class DBLayer
 
 	function __destruct()
 	{
-	    $this->close();
+		$this->close();
 	}
 
 	function start_transaction()

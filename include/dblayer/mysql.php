@@ -243,7 +243,11 @@ class DBLayer
 			if ($this->query_result)
 				@mysql_free_result($this->query_result);
 
-			return @mysql_close($this->link_id);
+			$result = @mysql_close($this->link_id);
+
+			$this->link_id = false;
+
+			return $result;
 		}
 		else
 			return false;

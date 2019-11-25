@@ -331,13 +331,19 @@ class DBLayer
 				if (defined('FORUM_SHOW_QUERIES') || defined('FORUM_DEBUG'))
 					$this->saved_queries[] = array('COMMIT', 0);
 
+				--$this->in_transaction;
+
 				@pg_query($this->link_id, 'COMMIT');
 			}
 
 			if ($this->query_result)
 				@pg_free_result($this->query_result);
 
-			return @pg_close($this->link_id);
+			$result = @pg_close($this->link_id);
+
+			$this->link_id = false;
+
+			return $result;
 		}
 		else
 			return false;

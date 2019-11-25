@@ -337,17 +337,23 @@ class DBLayer
 
 	function close()
 	{
-		if ($this->link_id)
+		if ($this->link_id instanceof SQLite3)
 		{
 			if ($this->in_transaction)
 			{
 				if (defined('FORUM_SHOW_QUERIES') || defined('FORUM_DEBUG'))
 					$this->saved_queries[] = array('COMMIT', 0);
 
+				--$this->in_transaction;
+
 				$this->link_id->exec('COMMIT');
 			}
 
-			return @/**/$this->link_id->close();
+			$result = @/**/$this->link_id->close();
+
+			$this->link_id = false;
+
+			return $result;
 		}
 		else
 			return false;

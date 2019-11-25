@@ -3445,7 +3445,10 @@ function error()
 			}
 
 			if (isset($file) && isset($line))
+			{
+				$file = str_replace(realpath(FORUM_ROOT), '', $file);
 				echo '<p class="error_line">'.forum_htmlencode(sprintf($lang_common['Forum error location'], $line, $file)).'</p>'."\n";
+			}
 		}
 	}
 ?>

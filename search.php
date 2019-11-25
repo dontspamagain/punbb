@@ -254,7 +254,7 @@ if (isset($query))
 
 		++$forum_page['item_count'];
 
-		if ($forum_config['o_censoring'] == '1')
+		if ($forum_config['o_censoring'] == '1' && isset($cur_set['subject']))
 			$cur_set['subject'] = censor_words($cur_set['subject']);
 
 		if ($show_as == 'posts')
@@ -695,7 +695,7 @@ if (!empty($forums))
 		}
 
 		echo "\t\t\t\t\t\t\t\t".'<div class="checklist-item"><span class="fld-input"><input type="checkbox" id="fld'.(++$forum_page['fld_count']).'" name="forum[]" value="'.$cur_forum['fid'].'" /></span> <label for="fld'.$forum_page['fld_count'].'">'.forum_htmlencode($cur_forum['forum_name']).'</label></div>'."\n";
-		
+
 		($hook = get_hook('se_forum_loop_end')) ? eval($hook) : null;
 	}
 

@@ -18,7 +18,7 @@
 
 //--------------------------------------------------------------------
 /**
-* Takes an UTF-8 string and returns an array of ints representing the 
+* Takes an UTF-8 string and returns an array of ints representing the
 * Unicode characters. Astral planes are supported ie. the ints in the
 * output can be > 0xFFFF. Occurrances of the BOM are ignored. Surrogates
 * are not allowed.
@@ -46,7 +46,7 @@ function utf8_to_unicode($str) {
 
     for($i = 0; $i < $len; $i++) {
 
-        $in = ord($str{$i});
+        $in = ord($str[$i]);
 
         if ( $mState == 0) {
 
@@ -184,11 +184,11 @@ function utf8_to_unicode($str) {
 
 //--------------------------------------------------------------------
 /**
-* Takes an array of ints representing the Unicode characters and returns 
+* Takes an array of ints representing the Unicode characters and returns
 * a UTF-8 string. Astral planes are supported ie. the ints in the
 * input can be > 0xFFFF. Occurrances of the BOM are ignored. Surrogates
 * are not allowed.
-* Returns false if the input array contains ints that represent 
+* Returns false if the input array contains ints that represent
 * surrogates or are outside the Unicode range
 * and raises a PHP error at level E_USER_WARNING
 * Note: this function has been modified slightly in this library to use

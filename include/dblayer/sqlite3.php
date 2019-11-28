@@ -238,7 +238,7 @@ class DBLayer
 			else
 				$cur_row = @/**/$query_id->fetchArray(SQLITE3_NUM);
 
-			return $cur_row[$col];
+			return is_array($cur_row) ? $cur_row[$col] : false;
 		}
 		else
 			return false;

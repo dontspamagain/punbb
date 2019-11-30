@@ -256,7 +256,7 @@ class DBLayer
 
 	function set_names($names)
 	{
-		return $this->query('SET NAMES \''.$this->escape($names).'\'');
+		return mysqli_set_charset($this->link_id, $names);
 	}
 
 

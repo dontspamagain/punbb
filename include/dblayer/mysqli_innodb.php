@@ -101,9 +101,11 @@ class DBLayer
 				$this->saved_queries[] = array($sql, 0);
 
 			if ($this->in_transaction)
-				mysqli_query($this->link_id, 'ROLLBACK');
+			{
+				--$this->in_transaction;
 
-			--$this->in_transaction;
+				mysqli_query($this->link_id, 'ROLLBACK');
+			}
 
 			return false;
 		}

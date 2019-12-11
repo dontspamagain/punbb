@@ -121,9 +121,11 @@ class DBLayer
 			$this->error_msg = $this->link_id->lastErrorMsg();
 
 			if ($this->in_transaction)
-				$this->link_id->exec('ROLLBACK');
+			{
+				--$this->in_transaction;
 
-			--$this->in_transaction;
+				$this->link_id->exec('ROLLBACK');
+			}
 
 			return false;
 		}
@@ -310,7 +312,7 @@ class DBLayer
 
 	function free_result($query_id = false)
 	{
-		if ($query_id)
+		if ($query_id instanceof Sqlite3Result)
 		{
 			@/**/$query_id->finalize();
 		}
@@ -383,10 +385,7 @@ class DBLayer
 		$table_exists = (intval($this->result($result)) > 0);
 
 		// Free results for DROP
-		if ($result instanceof Sqlite3Result)
-		{
-			$this->free_result($result);
-		}
+		$this->free_result($result);
 
 		return $table_exists;
 	}
@@ -417,10 +416,7 @@ class DBLayer
 		$index_exists = (intval($this->result($result)) > 0);
 
 		// Free results for DROP
-		if ($result instanceof Sqlite3Result)
-		{
-			$this->free_result($result);
-		}
+		$this->free_result($result);
 
 		return $index_exists;
 	}
@@ -506,7 +502,6 @@ class DBLayer
 		if ($num_rows < 1)
 			return;
 
-
 		// Work out the columns in the table currently
 		$table_lines = explode("\n", $table['sql']);
 		$table['columns'] = array();
@@ -532,17 +527,9 @@ class DBLayer
 		if ($this->field_exists($table_name, $field_name, $no_prefix))
 			return;
 
-		$table = $this->get_table_info($table_name, $no_prefix);
-
-		// Create temp table
-		$now = time();
-		$tmptable = str_replace('CREATE TABLE '.($no_prefix ? '' : $this->prefix).$this->escape($table_name).' (', 'CREATE TABLE '.($no_prefix ? '' : $this->prefix).$this->escape($table_name).'_t'.$now.' (', $table['sql']);
-		$this->query($tmptable) or error(__FILE__, __LINE__);
-		$this->query('INSERT INTO '.($no_prefix ? '' : $this->prefix).$this->escape($table_name).'_t'.$now.' SELECT * FROM '.($no_prefix ? '' : $this->prefix).$this->escape($table_name)) or error(__FILE__, __LINE__);
-
-		// Create new table sql
 		$field_type = preg_replace(array_keys($this->datatype_transformations), array_values($this->datatype_transformations), $field_type);
-		$query = $field_type;
+
+		$query = 'ALTER TABLE '.($no_prefix ? '' : $this->prefix).$this->escape($table_name).' ADD '.$field_name.' '.$field_type;
 
 		if (!$allow_null)
 			$query .= ' NOT NULL';
@@ -552,41 +539,10 @@ class DBLayer
 
 		if (!is_null($default_value))
 			$query .= ' DEFAULT '.$default_value;
+		else if (!$allow_null)
+			$query .= ' DEFAULT \'\'';
 
-		$old_columns = array_keys($table['columns']);
-		array_insert($table['columns'], $after_field, $query.',', $field_name);
-
-		$new_table = 'CREATE TABLE '.($no_prefix ? '' : $this->prefix).$this->escape($table_name).' (';
-
-		foreach ($table['columns'] as $cur_column => $column_details)
-			$new_table .= "\n".$cur_column.' '.$column_details;
-
-		if (isset($table['unique']))
-			$new_table .= "\n".$table['unique'].',';
-
-		if (isset($table['primary_key']))
-			$new_table .= "\n".$table['primary_key'];
-
-		$new_table = trim($new_table, ',')."\n".');';
-
-		// Drop old table
-		$this->drop_table($table_name, $no_prefix);
-
-		// Create new table
-		$this->query($new_table) or error(__FILE__, __LINE__);
-
-		// Recreate indexes
-		if (!empty($table['indices']))
-		{
-			foreach ($table['indices'] as $cur_index)
-				$this->query($cur_index) or error(__FILE__, __LINE__);
-		}
-
-		//Copy content back
-		$this->query('INSERT INTO '.($no_prefix ? '' : $this->prefix).$this->escape($table_name).' ('.implode(', ', $old_columns).') SELECT * FROM '.($no_prefix ? '' : $this->prefix).$this->escape($table_name).'_t'.$now) or error(__FILE__, __LINE__);
-
-		// Drop temp table
-		$this->drop_table($table_name.'_t'.$now, $no_prefix);
+		$this->query($query) or error(__FILE__, __LINE__);
 	}
 
 

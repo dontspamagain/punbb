@@ -506,6 +506,8 @@ class DBLayer
 
 		if (!is_null($default_value))
 			$query .= ' DEFAULT '.$default_value;
+		else if (!$allow_null)
+			$query .= ' DEFAULT \'\'';
 
 		$old_columns = array_keys($table['columns']);
 		array_insert($table['columns'], $after_field, $query.',', $field_name);

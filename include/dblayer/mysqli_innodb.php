@@ -23,6 +23,9 @@ class DBLayer
 	var $saved_queries = array();
 	var $num_queries = 0;
 
+	var $error_no = false;
+	var $error_msg = 'Unknown';
+
 	var $datatype_transformations = array(
 		'/^SERIAL$/'	=>	'INT(10) UNSIGNED AUTO_INCREMENT'
 	);
@@ -99,6 +102,9 @@ class DBLayer
 		{
 			if (defined('FORUM_SHOW_QUERIES') || defined('FORUM_DEBUG'))
 				$this->saved_queries[] = array($sql, 0);
+
+			$this->error_no = mysqli_errno($this->link_id);
+			$this->error_msg = mysqli_error($this->link_id);
 
 			if ($this->in_transaction)
 			{
@@ -251,8 +257,8 @@ class DBLayer
 	function error()
 	{
 		$result['error_sql'] = @current(@end($this->saved_queries));
-		$result['error_no'] = @mysqli_errno($this->link_id);
-		$result['error_msg'] = @mysqli_error($this->link_id);
+		$result['error_no'] = $this->error_no;
+		$result['error_msg'] = $this->error_msg;
 
 		return $result;
 	}

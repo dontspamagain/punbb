@@ -340,14 +340,14 @@ class DBLayer
 		if ($this->table_exists($table_name, $no_prefix))
 			return;
 
-		$query = 'CREATE TABLE '.($no_prefix ? '' : $this->prefix).$table_name." (\n";
+		$query = 'CREATE TABLE '.'`'.($no_prefix ? '' : $this->prefix).$table_name."` (\n";
 
 		// Go through every schema element and add it to the query
 		foreach ($schema['FIELDS'] as $field_name => $field_data)
 		{
 			$field_data['datatype'] = preg_replace(array_keys($this->datatype_transformations), array_values($this->datatype_transformations), $field_data['datatype']);
 
-			$query .= $field_name.' '.$field_data['datatype'];
+			$query .= '`'.$field_name.'` '.$field_data['datatype'];
 
 			if (isset($field_data['collation']))
 				$query .= 'CHARACTER SET utf8 COLLATE utf8_'.$field_data['collation'];
@@ -363,20 +363,20 @@ class DBLayer
 
 		// If we have a primary key, add it
 		if (isset($schema['PRIMARY KEY']))
-			$query .= 'PRIMARY KEY ('.implode(',', $schema['PRIMARY KEY']).'),'."\n";
+			$query .= 'PRIMARY KEY ('.$this->repl_array($schema['PRIMARY KEY']).'),'."\n";
 
 		// Add unique keys
 		if (isset($schema['UNIQUE KEYS']))
 		{
 			foreach ($schema['UNIQUE KEYS'] as $key_name => $key_fields)
-				$query .= 'UNIQUE KEY '.($no_prefix ? '' : $this->prefix).$table_name.'_'.$key_name.'('.implode(',', $key_fields).'),'."\n";
+				$query .= 'UNIQUE KEY '.($no_prefix ? '' : $this->prefix).$table_name.'_'.$key_name.'('.$this->repl_array($key_fields).'),'."\n";
 		}
 
 		// Add indexes
 		if (isset($schema['INDEXES']))
 		{
 			foreach ($schema['INDEXES'] as $index_name => $index_fields)
-				$query .= 'KEY '.($no_prefix ? '' : $this->prefix).$table_name.'_'.$index_name.'('.implode(',', $index_fields).'),'."\n";
+				$query .= 'KEY '.($no_prefix ? '' : $this->prefix).$table_name.'_'.$index_name.'('.$this->repl_array($index_fields).'),'."\n";
 		}
 
 		// We remove the last two characters (a newline and a comma) and add on the ending
@@ -391,7 +391,7 @@ class DBLayer
 		if (!$this->table_exists($table_name, $no_prefix))
 			return;
 
-		$this->query('DROP TABLE '.($no_prefix ? '' : $this->prefix).$table_name) or error(__FILE__, __LINE__);
+		$this->query('DROP TABLE '.'`'.($no_prefix ? '' : $this->prefix).$table_name.'`') or error(__FILE__, __LINE__);
 	}
 
 
@@ -405,7 +405,7 @@ class DBLayer
 		if ($default_value !== null && !is_int($default_value) && !is_float($default_value))
 			$default_value = '\''.$this->escape($default_value).'\'';
 
-		$this->query('ALTER TABLE '.($no_prefix ? '' : $this->prefix).$table_name.' ADD '.$field_name.' '.$field_type.($allow_null ? ' ' : ' NOT NULL').($default_value !== null ? ' DEFAULT '.$default_value : ' ').($after_field !== null ? ' AFTER '.$after_field : '')) or error(__FILE__, __LINE__);
+		$this->query('ALTER TABLE '.'`'.($no_prefix ? '' : $this->prefix).$table_name.'` ADD `'.$field_name.'` '.$field_type.($allow_null ? ' ' : ' NOT NULL').($default_value !== null ? ' DEFAULT '.$default_value : ' ').($after_field !== null ? ' AFTER `'.$after_field.'`' : '')) or error(__FILE__, __LINE__);
 	}
 
 
@@ -419,7 +419,7 @@ class DBLayer
 		if ($default_value !== null && !is_int($default_value) && !is_float($default_value))
 			$default_value = '\''.$this->escape($default_value).'\'';
 
-		$this->query('ALTER TABLE '.($no_prefix ? '' : $this->prefix).$table_name.' MODIFY '.$field_name.' '.$field_type.($allow_null ? ' ' : ' NOT NULL').($default_value !== null ? ' DEFAULT '.$default_value : ' ').($after_field !== null ? ' AFTER '.$after_field : '')) or error(__FILE__, __LINE__);
+		$this->query('ALTER TABLE '.'`'.($no_prefix ? '' : $this->prefix).$table_name.'` MODIFY `'.$field_name.'` '.$field_type.($allow_null ? ' ' : ' NOT NULL').($default_value !== null ? ' DEFAULT '.$default_value : ' ').($after_field !== null ? ' AFTER `'.$after_field.'`' : '')) or error(__FILE__, __LINE__);
 	}
 
 
@@ -428,7 +428,7 @@ class DBLayer
 		if (!$this->field_exists($table_name, $field_name, $no_prefix))
 			return;
 
-		$this->query('ALTER TABLE '.($no_prefix ? '' : $this->prefix).$table_name.' DROP '.$field_name) or error(__FILE__, __LINE__);
+		$this->query('ALTER TABLE '.'`'.($no_prefix ? '' : $this->prefix).$table_name.'` DROP `'.$field_name.'`') or error(__FILE__, __LINE__);
 	}
 
 
@@ -437,7 +437,7 @@ class DBLayer
 		if ($this->index_exists($table_name, $index_name, $no_prefix))
 			return;
 
-		$this->query('ALTER TABLE '.($no_prefix ? '' : $this->prefix).$table_name.' ADD '.($unique ? 'UNIQUE ' : '').'INDEX '.($no_prefix ? '' : $this->prefix).$table_name.'_'.$index_name.' ('.implode(',', $index_fields).')') or error(__FILE__, __LINE__);
+		$this->query('ALTER TABLE '.'`'.($no_prefix ? '' : $this->prefix).$table_name.'` ADD '.($unique ? 'UNIQUE ' : '').'INDEX '.($no_prefix ? '' : $this->prefix).$table_name.'_'.$index_name.' ('.$this->repl_array($index_fields).')') or error(__FILE__, __LINE__);
 	}
 
 
@@ -446,6 +446,19 @@ class DBLayer
 		if (!$this->index_exists($table_name, $index_name, $no_prefix))
 			return;
 
-		$this->query('ALTER TABLE '.($no_prefix ? '' : $this->prefix).$table_name.' DROP INDEX '.($no_prefix ? '' : $this->prefix).$table_name.'_'.$index_name) or error(__FILE__, __LINE__);
+		$this->query('ALTER TABLE '.'`'.($no_prefix ? '' : $this->prefix).$table_name.'` DROP INDEX '.($no_prefix ? '' : $this->prefix).$table_name.'_'.$index_name) or error(__FILE__, __LINE__);
+	}
+
+	function repl_array($arr)
+	{
+		foreach ($arr as &$value) {
+			if (false !== strpos($value, '(') && preg_match('%^(.*)\s*(\(\d+\))$%', $value, $matches)) {
+				$value = "`{$matches[1]}`{$matches[2]}";
+			} else {
+				$value = "`{$value}`";
+			}
+			unset($value);
+		}
+		return implode(',', $arr);
 	}
 }

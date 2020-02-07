@@ -1499,7 +1499,7 @@ if (strpos($cur_version, '1.2') === 0 && $db_seems_utf8 && !isset($_GET['force']
 		// Convert ranks
 		echo 'Converting ranks…'."<br />\n";
 		$query = array(
-			'SELECT'	=> 'id, rank',
+			'SELECT'	=> 'id, '.$forum_db->quotes.'rank'.$forum_db->quotes,
 			'FROM'		=> 'ranks',
 			'ORDER BY'	=> 'id'
 		);
@@ -1511,7 +1511,7 @@ if (strpos($cur_version, '1.2') === 0 && $db_seems_utf8 && !isset($_GET['force']
 			{
 				$query = array(
 					'UPDATE'	=> 'ranks',
-					'SET'		=> 'rank = \''.$forum_db->escape($cur_item['rank']).'\'',
+					'SET'		=> $forum_db->quotes.'rank'.$forum_db->quotes.' = \''.$forum_db->escape($cur_item['rank']).'\'',
 					'WHERE'		=> 'id = '.$cur_item['id']
 				);
 

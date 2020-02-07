@@ -30,6 +30,8 @@ class DBLayer
 		'/^SERIAL$/'	=>	'INT(10) UNSIGNED AUTO_INCREMENT'
 	);
 
+	var $quotes = '`';
+
 
 	function __construct($db_host, $db_username, $db_password, $db_name, $db_prefix, $foo)
 	{
@@ -454,6 +456,7 @@ class DBLayer
 
 		$this->query('ALTER TABLE '.'`'.($no_prefix ? '' : $this->prefix).$table_name.'` DROP INDEX '.($no_prefix ? '' : $this->prefix).$table_name.'_'.$index_name) or error(__FILE__, __LINE__);
 	}
+
 
 	function repl_array($arr)
 	{

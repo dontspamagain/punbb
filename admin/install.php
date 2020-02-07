@@ -1801,7 +1801,7 @@ else
 
 	// Insert the default ranks
 	$query = array(
-		'INSERT'	=> 'rank, min_posts',
+		'INSERT'	=> $forum_db->quotes.'rank'.$forum_db->quotes.', min_posts',
 		'INTO'		=> 'ranks',
 		'VALUES'	=> '\''.$lang_install['Default rank 1'].'\', 0'
 	);
@@ -1809,7 +1809,7 @@ else
 	$forum_db->query_build($query) or error(__FILE__, __LINE__);
 
 	$query = array(
-		'INSERT'	=> 'rank, min_posts',
+		'INSERT'	=> $forum_db->quotes.'rank'.$forum_db->quotes.', min_posts',
 		'INTO'		=> 'ranks',
 		'VALUES'	=> '\''.$lang_install['Default rank 2'].'\', 10'
 	);

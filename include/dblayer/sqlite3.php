@@ -504,6 +504,9 @@ class DBLayer
 		if ($num_rows < 1)
 			return;
 
+		// fix multiple fields in one line
+		$table['sql'] = str_replace(', ', ",\n", $table['sql']);
+
 		// Work out the columns in the table currently
 		$table_lines = explode("\n", $table['sql']);
 		$table['columns'] = array();

@@ -520,11 +520,11 @@ function preparse_tags($text, &$errors, $is_signature = false)
 //
 // Preparse the contents of [list] bbcode
 //
-function preparse_list_tag($content, $type = '*', &$errors)
+function preparse_list_tag($content, $type, &$errors)
 {
 	global $lang_common;
 
-	if (strlen($type) != 1)
+	if (null === $type || strlen($type) != 1)
 		$type = '*';
 
 	if (strpos($content,'[list') !== false)

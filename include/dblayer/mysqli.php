@@ -167,7 +167,8 @@ class DBLayer
 				@mysqli_data_seek($query_id, $row);
 
 			$cur_row = @mysqli_fetch_row($query_id);
-			return $cur_row[$col];
+
+			return isset($cur_row[$col]) ? $cur_row[$col] : false;
 		}
 		else
 			return false;
@@ -242,7 +243,7 @@ class DBLayer
 	{
 		if ($this->link_id)
 		{
-			if ($this->query_result)
+			if ($this->query_result instanceof mysqli_result)
 				@mysqli_free_result($this->query_result);
 
 			$result = @mysqli_close($this->link_id);

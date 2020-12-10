@@ -1795,32 +1795,27 @@ function get_tracked_topics()
 	if ($return !== null)
 		return $return;
 
-	$cookie_data = isset($_COOKIE[$cookie_name.'_track']) ? $_COOKIE[$cookie_name.'_track'] : false;
-	if (!$cookie_data)
-		return array('topics' => array(), 'forums' => array());
+	$tracked_topics = array('topics' => array(), 'forums' => array());
 
-	if (strlen($cookie_data) > 4048)
-		return array('topics' => array(), 'forums' => array());
+	$cookie_data = isset($_COOKIE[$cookie_name.'_track']) ? $_COOKIE[$cookie_name.'_track'] : false;
+	if (! $cookie_data || strlen($cookie_data) > 4048)
+		return $tracked_topics;
 
 	// Unserialize data from cookie
-	$tracked_topics = array('topics' => array(), 'forums' => array());
 	foreach (explode(';', $cookie_data) as $id_data)
 	{
-		switch (substr($id_data, 0, 1))
-		{
-			case 'f': $type = 'forums'; break;
-			case 't': $type = 'topics'; break;
-			default: continue 2;
+		if (isset($id_data[3])) {
+			$type = substr($id_data, 0, 1) === 'f' ? 'forums' : 'topics';
+			$data = explode('=', substr($id_data, 1), 2);
+
+			if (
+				isset($data[1])
+				&& 0 < ($id = (int) $data[0])
+				&& 0 < ($timestamp = (int) $data[1])
+			) {
+				$tracked_topics[$type][$id] = $timestamp;
+			}
 		}
-
-		$id = intval(substr($id_data, 1));
-
-		if (($pos = strpos($id_data, '=')) === false)
-			continue;
-		$timestamp = intval(substr($id_data, $pos + 1));
-
-		if ($id > 0 && $timestamp > 0)
-			$tracked_topics[$type][$id] = $timestamp;
 	}
 
 	($hook = get_hook('fn_get_tracked_topics_end')) ? eval($hook) : null;

@@ -202,19 +202,31 @@ function forum_fix_request_uri()
 // Use headers_sent() to ckeck wether HTTP headers has been sent already.
 function forum_setcookie($name, $value, $expire)
 {
-	global $cookie_path, $cookie_domain, $cookie_secure;
+	global $cookie_path, $cookie_domain, $cookie_secure, $cookie_samesite;
 
 	$return = ($hook = get_hook('fn_forum_setcookie_start')) ? eval($hook) : null;
 	if ($return !== null)
 		return;
 
-	// Enable sending of a P3P header
+	if (empty($cookie_samesite))
+		$cookie_samesite = 'Lax';
+	else if ($cookie_samesite !== 'Strict' && $cookie_samesite !== 'Lax' && $cookie_samesite !== 'None')
+		$cookie_samesite = 'Lax';
+
+		// Enable sending of a P3P header
 	header('P3P: CP="CUR ADM"');
 
-	if (version_compare(PHP_VERSION, '5.2.0', '>='))
-		setcookie($name, $value, $expire, $cookie_path, $cookie_domain, $cookie_secure, true);
+	if (PHP_VERSION_ID < 70300)
+		setcookie($name, $value, $expire, $cookie_path.'; SameSite='.$cookie_samesite, $cookie_domain, $cookie_secure, true);
 	else
-		setcookie($name, $value, $expire, $cookie_path.'; HttpOnly', $cookie_domain, $cookie_secure);
+		setcookie($name, $value, [
+			'expires'  => $expire,
+			'path'     => $cookie_path,
+			'domain'   => $cookie_domain,
+			'secure'   => $cookie_secure,
+			'httponly' => true,
+			'samesite' => $cookie_samesite,
+		]);
 }
 
 

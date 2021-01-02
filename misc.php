@@ -581,7 +581,7 @@ else if (isset($_GET['report']))
 			</fieldset>
 <?php ($hook = get_hook('mi_report_fieldset_end')) ? eval($hook) : null; ?>
 			<div class="frm-buttons">
-				<span class="submit primary"><input type="submit" name="submit" value="<?php echo $lang_common['Submit'] ?>" /></span>
+				<span class="submit primary caution"><input type="submit" name="submit" value="<?php echo $lang_common['Submit'] ?>" /></span>
 				<span class="cancel"><input type="submit" name="cancel" value="<?php echo $lang_common['Cancel'] ?>" formnovalidate /></span>
 			</div>
 		</form>

@@ -71,3 +71,33 @@ AddCharset utf-8 .html .css .js .xml .json .rss
 </IfModule>
 
 # END PunBB
+
+# START Visman
+# https://punbb.informer.com/forums/topic/30841/add-a-little-bit-of-security/
+
+<ifModule mod_headers.c>
+  # Set security headers if missing.
+  # (This Content-Security-Policy makes almost no sense (there are many inline scripts and styles on the forum, frames from media sites are allowed).)
+  #
+  ### Chances are, you will have to customize the permissions for your forum individually. ###
+  ### If your Apache version is lower than 2.4.10 then remove all "expr = -z% {resp: ...}" ###
+  #
+  Header always set Content-Security-Policy "object-src 'none';frame-ancestors 'none';base-uri 'none';form-action 'self'" "expr=-z %{resp:Content-Security-Policy}"
+  Header always set Feature-Policy "accelerometer 'none';ambient-light-sensor 'none';autoplay 'none';battery 'none';camera 'none';document-domain 'self';fullscreen 'self';geolocation 'none';gyroscope 'none';magnetometer 'none';microphone 'none';midi 'none';payment 'none';picture-in-picture 'none';sync-xhr 'self';usb 'none'" "expr=-z %{resp:Feature-Policy}"
+  Header always set Referrer-Policy "origin-when-cross-origin" "expr=-z %{resp:Referrer-Policy}"
+#  Header set Strict-Transport-Security "max-age=31536000" "expr=-z %{resp:Strict-Transport-Security}" # for https only site
+  Header always set X-Content-Type-Options "nosniff" "expr=-z %{resp:X-Content-Type-Options}"
+  Header always set X-Frame-Options "DENY" "expr=-z %{resp:X-Frame-Options}"
+  Header always set X-XSS-Protection "1; mode=block" "expr=-z %{resp:X-XSS-Protection}"
+  Header always set Permissions-Policy "accelerometer=(),ambient-light-sensor=(),autoplay=(),battery=(),camera=(),document-domain=(self),fullscreen=(self),geolocation=(),gyroscope=(),magnetometer=(),microphone=(),midi=(),payment=(),picture-in-picture=(),sync-xhr=(self),usb=()" "expr=-z %{resp:Permissions-Policy}"
+
+  # Remove headers containing php information
+  Header unset X-Powered-By
+  Header always unset X-Powered-By
+</ifModule>
+
+# Hiding information about the system
+ServerSignature Off
+#ServerTokens ProductOnly # Use only in server config, do not use in .htaccess
+
+# END Visman

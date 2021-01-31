@@ -19,8 +19,8 @@ define('PER_PAGE', 300);
 define('MIN_MYSQL_VERSION', '4.1.2');
 
 
-// Make sure we are running at least PHP 5.3.0
-if (!function_exists('version_compare') || version_compare(PHP_VERSION, '5.3.0', '<'))
+// Make sure we are running at least PHP 5.3.7
+if (!function_exists('version_compare') || version_compare(PHP_VERSION, '5.3.7', '<'))
 	exit('You are running PHP version '.PHP_VERSION.'. '.UPDATE_TO.' requires at least PHP 5.3.0 to run properly. You must upgrade your PHP installation before you can continue.');
 
 

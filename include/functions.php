@@ -1215,6 +1215,73 @@ function validate_search_word($word)
 }
 
 
+if (!function_exists('random_bytes'))
+{
+	// Fake for PHP5
+	// Who is using PHP5 now? O_o
+	// Use https://github.com/paragonie/random_compat
+	function random_bytes($length)
+	{
+		$result = '';
+
+		if (
+			function_exists('mcrypt_create_iv')
+			&& (
+				DIRECTORY_SEPARATOR !== '/'
+				|| (PHP_VERSION_ID <= 50609 || PHP_VERSION_ID >= 50613)
+			)
+		)
+		{
+			$result .= (string) mcrypt_create_iv($length, MCRYPT_DEV_URANDOM);
+		}
+
+		if (strlen($result) < $length && function_exists('openssl_random_pseudo_bytes'))
+		{
+			$tmp = (string) openssl_random_pseudo_bytes($length, $strong);
+			if ($strong) {
+				$result .= $tmp;
+			}
+		}
+
+		while (strlen($result) < $length)
+		{
+			$result .= chr(mt_rand(0, 255));
+		}
+
+		return $result;
+	}
+}
+
+
+if (!function_exists('random_int'))
+{
+	// Fake for PHP5
+	// Who is using PHP5 now? O_o
+	// Use https://github.com/paragonie/random_compat
+	function random_int($min, $max)
+	{
+		$range = $count = $max - $min;
+		$bits = 0;
+
+		do
+		{
+			++$bits;
+			$count = (int) ($count / 2);
+		} while ($count);
+
+		$bitmask = pow(2, $bits) - 1;
+		$bytes = (int) ceil($bits / 8);
+
+		do
+		{
+            $result = hexdec(bin2hex(random_bytes($bytes))) & $bitmask;
+        } while ($result > $range);
+
+        return $result + $min;
+	}
+}
+
+
 // Generate a random key of length $len
 function random_key($len, $readable = false, $hash = false)
 {
@@ -1225,17 +1292,18 @@ function random_key($len, $readable = false, $hash = false)
 		return $return;
 
 	if ($hash)
-		$key = substr(sha1(uniqid(rand(), true)), 0, $len);
+		$key = substr(bin2hex(random_bytes($len)), 0, $len);
 	else if ($readable)
 	{
 		$chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+		$max = strlen($chars) - 1;
 
 		for ($i = 0; $i < $len; ++$i)
-			$key .= substr($chars, (mt_rand() % strlen($chars)), 1);
+			$key .= $chars[random_int(0, $max)];
 	}
 	else
 		for ($i = 0; $i < $len; ++$i)
-			$key .= chr(mt_rand(33, 126));
+			$key .= chr(random_int(33, 126));
 
 	($hook = get_hook('fn_random_key_end')) ? eval($hook) : null;
 

@@ -1274,10 +1274,10 @@ if (!function_exists('random_int'))
 
 		do
 		{
-            $result = hexdec(bin2hex(random_bytes($bytes))) & $bitmask;
-        } while ($result > $range);
+			$result = hexdec(bin2hex(random_bytes($bytes))) & $bitmask;
+		} while ($result > $range);
 
-        return $result + $min;
+		return $result + $min;
 	}
 }
 

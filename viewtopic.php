@@ -179,6 +179,9 @@ $forum_page['items_info'] = generate_items_info($lang_topic['Posts'], ($forum_pa
 
 ($hook = get_hook('vt_modify_page_details')) ? eval($hook) : null;
 
+if ($forum_config['o_censoring'] == '1')
+	$cur_topic['subject'] = censor_words($cur_topic['subject']);
+
 // Navigation links for header and page numbering for title/meta description
 if ($forum_page['page'] < $forum_page['num_pages'])
 {
@@ -191,9 +194,6 @@ if ($forum_page['page'] > 1)
 	$forum_page['nav']['first'] = '<link rel="first" href="'.forum_link($forum_url['topic'], array($id, sef_friendly($cur_topic['subject']))).'" title="'.$lang_common['Page'].' 1" />';
 }
 $forum_page['nav']['canonical'] = '<link rel="canonical" href="'.forum_sublink($forum_url['topic'], $forum_url['page'], $forum_page['page'], array($id, sef_friendly($cur_topic['subject']))).'" title="'.$lang_common['Page'].' '.$forum_page['page'].'" />';
-
-if ($forum_config['o_censoring'] == '1')
-	$cur_topic['subject'] = censor_words($cur_topic['subject']);
 
 // Generate paging and posting links
 $forum_page['page_post']['paging'] = '<p class="paging"><span class="pages">'.$lang_common['Pages'].'</span> '.paginate($forum_page['num_pages'], $forum_page['page'], $forum_url['topic'], $lang_common['Paging separator'], array($id, sef_friendly($cur_topic['subject']))).'</p>';

@@ -135,7 +135,7 @@ function create_search_cache($keywords, $author, $search_in = false, $forum = ar
 					}
 
 					++$word_count;
-					$forum_db->free_result($result);
+#					$forum_db->free_result($result);
 
 					break;
 				}
@@ -184,7 +184,7 @@ function create_search_cache($keywords, $author, $search_in = false, $forum = ar
 			while ($row = $forum_db->fetch_row($result))
 				$author_results[] = $row[0];
 
-			$forum_db->free_result($result);
+#			$forum_db->free_result($result);
 		}
 	}
 
@@ -761,7 +761,7 @@ function get_search_results($query, &$search_set)
 		++$row_num;
 	}
 
-	$forum_db->free_result($result);
+#	$forum_db->free_result($result);
 
 	$return = ($hook = get_hook('sf_fn_get_search_results_end')) ? eval($hook) : null;
 	if ($return !== null)

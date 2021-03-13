@@ -91,7 +91,7 @@ function update_search_index($mode, $post_id, $message, $subject = null)
 		while ($row = $forum_db->fetch_assoc($result))
 			$cur_words[$row['subject_match'] == 1 ? 'subject' : 'post'][$row['word']] = $row['id'];
 
-		$forum_db->free_result($result);
+#		$forum_db->free_result($result);
 
 		$words = array(
 			'add'	=> array(
@@ -136,7 +136,7 @@ function update_search_index($mode, $post_id, $message, $subject = null)
 		while ($row = $forum_db->fetch_assoc($result))
 			$existing_words[] = $row['word'];
 
-		$forum_db->free_result($result);
+#		$forum_db->free_result($result);
 
 		$new_words = array_diff($unique_words, $existing_words);
 		if (!empty($new_words))

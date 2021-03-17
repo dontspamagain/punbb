@@ -681,6 +681,22 @@ function callback_handle_url_bb($reg)
 	return handle_url_tag($reg[1], (isset($reg[2]) ? $reg[2] : ''), true);
 }
 
+//
+// Email bbcode replace to <a href="mailto:...
+//
+function callback_handle_email($reg)
+{
+	if (isset($reg[2])) {
+		$mail = $reg[1];
+		$body = $reg[2];
+	} else {
+		$mail = $body = $reg[1];
+	}
+
+	$mail = implode('@', array_map('rawurlencode', array_map('rawurldecode', explode('@', $mail))));
+
+	return "<a href=\"mailto:{$mail}\">{$body}</a>";
+}
 
 //
 // Turns an URL from the [img] tag into an <img> tag or a <a href...> tag
@@ -802,11 +818,13 @@ function do_bbcode($text, $is_signature = false)
 	$text = preg_replace_callback('#\[url\]([^\[]*?)\[/url\]#', 'callback_handle_url_nobb', $text);
 	$text = preg_replace_callback('#\[url=([^\[]+?)\](.*?)\[/url\]#', 'callback_handle_url_nobb', $text);
 
-	$pattern[] = '#\[email\]([^\[]*?)\[/email\]#';
-	$pattern[] = '#\[email=([^\[]+?)\](.*?)\[/email\]#';
+	$text = preg_replace_callback('#\[email\]([^\[]*?)\[/email\]#', 'callback_handle_email', $text);
+	$text = preg_replace_callback('#\[email=([^\[]+?)\](.*?)\[/email\]#', 'callback_handle_email', $text);
+//	$pattern[] = '#\[email\]([^\[]*?)\[/email\]#';
+//	$pattern[] = '#\[email=([^\[]+?)\](.*?)\[/email\]#';
 
-	$replace[] = '<a href="mailto:$1">$1</a>';
-	$replace[] = '<a href="mailto:$1">$2</a>';
+//	$replace[] = '<a href="mailto:$1">$1</a>';
+//	$replace[] = '<a href="mailto:$1">$2</a>';
 
 	$return = ($hook = get_hook('ps_do_bbcode_replace')) ? eval($hook) : null;
 	if ($return !== null)

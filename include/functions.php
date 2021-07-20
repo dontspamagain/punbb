@@ -14,14 +14,14 @@
 // Encodes the contents of $str so that they are safe to output on an (X)HTML page
 function forum_htmlencode($str)
 {
-	return htmlspecialchars($str, ENT_QUOTES, 'UTF-8');
+	return is_string($str) ? htmlspecialchars($str, ENT_QUOTES, 'UTF-8') : '';
 }
 
 
 // Trim whitespace including non-breaking space
 function forum_trim($str, $charlist = " \t\n\r\0\x0B\xC2\xA0")
 {
-	return utf8_trim($str, $charlist);
+	return is_string($str) ? utf8_trim($str, $charlist) : '';
 }
 
 

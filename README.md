@@ -3,7 +3,7 @@
 PunBB is a fast and lightweight PHP-powered discussion board. It is released under the GNU General Public License. Its primary goals are to be faster, smaller and less graphically intensive as compared to other discussion boards. PunBB has fewer features than many other discussion boards, but is generally faster and outputs smaller, semantically correct XHTML-compliant pages.
 
 ## Quick install
- 1. [Download the latest revision of PunBB](http://punbb.informer.com/downloads.php). Decompress the PunBB archive to a directory.
+ 1. [Download the latest revision of PunBB](https://github.com/MioVisman/punbb/archive/refs/heads/master.zip). Decompress the PunBB archive to a directory.
  2. Copy (or upload) all the files contained in this archive into the directory where you want to run your forums. (e.g. /home/user/www/punbb/)
  3. Run install.php from the forum admin directory (e.g. open http://example.com/punbb/admin/install.php in your browser). Follow the instructions.
 
@@ -21,18 +21,17 @@ NOTE: You may use the pun_repository official PunBB extension to download and in
 
 ## Contributing
 
-Please report issues on the [Github issue tracker](https://github.com/punbb/punbb/issues).
+Please report issues on the [Github issue tracker](https://github.com/MioVisman/punbb/issues).
 Personal email addresses are not appropriate for bug reports.
 
 ## Links
- - [Documentation](http://punbb.informer.com/wiki/)
- - [Internationalization](http://punbb.informer.com/wiki/punbb13/language_packs)
- - [Styles](http://punbb.informer.com/wiki/punbb13/syles)
- - [Extensions repository](http://punbb.informer.com/extensions/)
- - [Community Forums](http://punbb.informer.com/forums/)
- - [Twitter](https://twitter.com/punbb_forum)
- - [Development](https://github.com/punbb/punbb/)
- - [Reporting PunBB core SECURITY bugs (only!)](http://punbb.informer.com/bugreport.php)
+ - [Documentation](https://punbb.informer.com/wiki/)
+ - [Internationalization](https://punbb.informer.com/wiki/punbb13/language_packs)
+ - [Styles](https://punbb.informer.com/wiki/punbb13/syles)
+ - [Extensions repository](https://punbb.informer.com/extensions/)
+ - [Community Forums](https://punbb.informer.com/forums/)
+ - [Development](https://github.com/MioVisman/punbb)
+ - [Reporting PunBB core SECURITY bugs (only!)](mailto:mio.visman@yandex.ru)
 
 ## Copyright and disclaimer
 This package and its contents are (C) 2002-2012 PunBB, all rights reserved.

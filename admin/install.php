@@ -1795,6 +1795,12 @@ else
 
 	$forum_db->query_build($query) or error(__FILE__, __LINE__);
 
+	// fix for validate_search_word() function
+	if (! isset($forum_user))
+		$forum_user = [];
+	if (! isset($forum_user['language']))
+		$forum_user['language'] = $default_lang;
+
 	// Add new post to search table
 	require FORUM_ROOT.'include/search_idx.php';
 	update_search_index('post', $forum_db->insert_id(), $lang_install['Default post contents'], $lang_install['Default topic subject']);

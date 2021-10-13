@@ -105,14 +105,14 @@ if (!isset($_POST['form_sent']))
 
 	if (function_exists('mysqli_connect'))
 	{
-		$db_extensions[] = array('mysqli', 'MySQL Improved');
 		$db_extensions[] = array('mysqli_innodb', 'MySQL Improved (InnoDB)');
+		$db_extensions[] = array('mysqli', 'MySQL Improved');
 	}
 
 	if (function_exists('mysql_connect'))
 	{
-		$db_extensions[] = array('mysql', 'MySQL Standard');
 		$db_extensions[] = array('mysql_innodb', 'MySQL Standard (InnoDB)');
+		$db_extensions[] = array('mysql', 'MySQL Standard');
 	}
 
 	if (function_exists('sqlite_open'))

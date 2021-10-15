@@ -118,7 +118,7 @@ function utf8_substr($str, $offset, $length = FALSE){
 * @subpackage strings
 */
 function utf8_strtolower($str){
-    return mb_strtolower($str);
+    return is_string($str) ? mb_strtolower($str) : '';
 }
 
 //--------------------------------------------------------------------
@@ -136,5 +136,5 @@ function utf8_strtolower($str){
 * @subpackage strings
 */
 function utf8_strtoupper($str){
-    return mb_strtoupper($str);
+    return is_string($str) ? mb_strtoupper($str) : '';
 }

@@ -231,7 +231,7 @@ class DBLayer
 
 	function error()
 	{
-		$result['error_sql'] = @current(@end($this->saved_queries));
+		$result['error_sql'] = empty($this->saved_queries) ? '' : end($this->saved_queries);
 		$result['error_no'] = @mysqli_errno($this->link_id);
 		$result['error_msg'] = @mysqli_error($this->link_id);
 

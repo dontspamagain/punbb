@@ -350,7 +350,7 @@ else if (isset($_GET['edit_forum']))
 
 				// The new permissions for this group
 				$perms_new = array(
-					'read_forum'	=>	($cur_group['g_read_board'] == '1') ? isset($_POST['read_forum_new'][$cur_group['g_id']]) ? '1' : '0' : intval($_POST['read_forum_old'][$cur_group['g_id']]),
+					'read_forum'	=>	$cur_group['g_read_board'] == '1' ? (isset($_POST['read_forum_new'][$cur_group['g_id']]) ? '1' : '0') : intval($_POST['read_forum_old'][$cur_group['g_id']]),
 					'post_replies'	=>	isset($_POST['post_replies_new'][$cur_group['g_id']]) ? '1' : '0',
 					'post_topics'	=>	isset($_POST['post_topics_new'][$cur_group['g_id']]) ? '1' : '0'
 				);

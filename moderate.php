@@ -56,7 +56,7 @@ if (isset($_GET['get_host']))
 
 	($hook = get_hook('mr_view_ip_pre_output')) ? eval($hook) : null;
 
-	message(sprintf($lang_misc['Hostname lookup'], $ip, @gethostbyaddr($ip), '<a href="'.forum_link($forum_url['admin_users']).'?show_users='.$ip.'">'.$lang_misc['Show more users'].'</a>'));
+	message(sprintf($lang_misc['Hostname lookup'], $ip, forum_htmlencode(@gethostbyaddr($ip)), '<a href="'.forum_link($forum_url['admin_users']).'?show_users='.$ip.'">'.$lang_misc['Show more users'].'</a>'));
 }
 
 
@@ -888,7 +888,7 @@ if (isset($_REQUEST['move_topics']) || isset($_POST['move_topics_to']))
 	foreach ($forum_list as $cur_forum)
 	{
 		($hook = get_hook('mr_move_topics_forum_loop_start')) ? eval($hook) : null;
-		
+
 		if ($cur_forum['cid'] != $forum_page['cur_category'])	// A new category since last iteration?
 		{
 			if ($forum_page['cur_category'])
@@ -900,7 +900,7 @@ if (isset($_REQUEST['move_topics']) || isset($_POST['move_topics_to']))
 
 		if ($cur_forum['fid'] != $fid)
 			echo "\t\t\t\t".'<option value="'.$cur_forum['fid'].'">'.forum_htmlencode($cur_forum['forum_name']).'</option>'."\n";
-			
+
 		($hook = get_hook('mr_move_topics_forum_loop_end')) ? eval($hook) : null;
 	}
 

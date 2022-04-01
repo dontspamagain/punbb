@@ -1954,8 +1954,8 @@ if (!$written)
 				<form class="frm-form" method="post" accept-charset="utf-8" action="install.php">
 					<div class="hidden">
 					<input type="hidden" name="generate_config" value="1" />
-					<input type="hidden" name="db_type" value="<?php echo $db_type ?>" />
-					<input type="hidden" name="db_host" value="<?php echo $db_host ?>" />
+					<input type="hidden" name="db_type" value="<?php echo forum_htmlencode($db_type) ?>" />
+					<input type="hidden" name="db_host" value="<?php echo forum_htmlencode($db_host) ?>" />
 					<input type="hidden" name="db_name" value="<?php echo forum_htmlencode($db_name) ?>" />
 					<input type="hidden" name="db_username" value="<?php echo forum_htmlencode($db_username) ?>" />
 					<input type="hidden" name="db_password" value="<?php echo forum_htmlencode($db_password) ?>" />

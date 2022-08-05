@@ -876,8 +876,14 @@ function sef_friendly($str)
 		return $return;
 
 	$str = strtr($str, $lang_url_replace);
-	$str = strtolower(utf8_decode($str));
-	$str = forum_trim(preg_replace(array('/[^a-z0-9\s]/', '/[\s]+/'), array('', '-'), $str), '-');
+	if (function_exists('transliterator_transliterate')) {
+		$str = transliterator_transliterate("Any-Latin; NFD; [:Nonspacing Mark:] Remove; NFC; [:Punctuation:] Remove; Lower();", $str);
+	} elseif (function_exists('mb_convert_encoding')) {
+		$str = mb_convert_encoding($str, 'ISO-8859-1', 'UTF-8');
+	} else {
+		$str = utf8_decode($str);
+	}
+	$str = forum_trim(preg_replace(array('/[^a-z0-9\s]/', '/[\s]+/'), array('', '-'), strtolower($str)), '-');
 
 	foreach ($forum_reserved_strings as $match => $replace)
 		if ($str == $match)

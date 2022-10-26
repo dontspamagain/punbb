@@ -215,7 +215,7 @@ else if (isset($_POST['del_cat']) || isset($_POST['del_cat_comply']))
 else if (isset($_POST['update']))	// Change position and name of the categories
 {
 	$cat_order = array_map('intval', $_POST['cat_order']);
-	$cat_name = array_map('trim', $_POST['cat_name']);
+	$cat_name = array_map('forum_trim', $_POST['cat_name']);
 
 	($hook = get_hook('acg_update_cats_form_submitted')) ? eval($hook) : null;
 

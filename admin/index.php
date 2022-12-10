@@ -134,7 +134,7 @@ else if (function_exists('mmcache'))
 else if (isset($_PHPA))
 	$php_accelerator = '<a href="https://www.ioncube.com/">ionCube PHP Accelerator</a>';
 else if (ini_get('apc.enabled'))
-	$php_accelerator ='<a href="http://www.php.net/apc/">Alternative PHP Cache (APC)</a>';
+	$php_accelerator ='<a href="https://web.archive.org/web/20160324235630/http://www.php.net/apc/">Alternative PHP Cache (APC)</a>';
 else if (ini_get('zend_optimizer.optimization_level'))
 	$php_accelerator = '<a href="http://www.zend.com/products/zend_optimizer/">Zend Optimizer</a>';
 else if (ini_get('eaccelerator.enable'))

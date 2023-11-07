@@ -857,10 +857,13 @@ function forum_sublink($link, $sublink, $subarg, $args = null)
 function sef_friendly($str)
 {
 	global $forum_config, $forum_user;
-	static $lang_url_replace, $forum_reserved_strings;
+	static $lang_url_replace, $forum_reserved_strings, $transl_status, $transl;
 
-	if (!isset($lang_url_replace))
+	if (!isset($lang_url_replace)) {
+		$transl_status = function_exists('transliterator_transliterate');
+
 		require FORUM_ROOT.'lang/'.$forum_user['language'].'/url_replace.php';
+	}
 
 	if (!isset($forum_reserved_strings))
 	{
@@ -876,13 +879,15 @@ function sef_friendly($str)
 		return $return;
 
 	$str = strtr($str, $lang_url_replace);
-	if (function_exists('transliterator_transliterate')) {
-		$str = transliterator_transliterate("Any-Latin; NFD; [:Nonspacing Mark:] Remove; NFC; [:Punctuation:] Remove; Lower();", $str);
-	} elseif (function_exists('mb_convert_encoding')) {
-		$str = mb_convert_encoding($str, 'ISO-8859-1', 'UTF-8');
-	} else {
-		$str = utf8_decode($str);
+
+	if ($transl_status && preg_match('%[\x7F-\xFF]%', $str)) {
+		if (! isset($transl)) {
+			$transl = Transliterator::create('Any-Latin; NFD; [:Nonspacing Mark:] Remove; NFC; [:Punctuation:] Remove; Lower();');
+		}
+
+		$str = $transl->transliterate($str);
 	}
+
 	$str = forum_trim(preg_replace(array('/[^a-z0-9\s]/', '/[\s]+/'), array('', '-'), strtolower($str)), '-');
 
 	foreach ($forum_reserved_strings as $match => $replace)

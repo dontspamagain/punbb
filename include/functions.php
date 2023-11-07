@@ -880,7 +880,7 @@ function sef_friendly($str)
 
 	$str = strtr($str, $lang_url_replace);
 
-	if ($transl_status && preg_match('%[\x7F-\xFF]%', $str)) {
+	if ($transl_status && preg_match('%[\x80-\xFF]%', $str)) {
 		if (! isset($transl)) {
 			$transl = Transliterator::create('Any-Latin; NFD; [:Nonspacing Mark:] Remove; NFC; [:Punctuation:] Remove; Lower();');
 		}

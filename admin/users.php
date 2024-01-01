@@ -278,7 +278,7 @@ else if (isset($_GET['show_users']))
 				'FROM'		=> 'users AS u',
 				'JOINS'		=> array(
 					array(
-						'INNER JOIN'	=> 'groups AS g',
+						'INNER JOIN'	=> '`groups` AS g',
 						'ON'			=> 'g.g_id=u.group_id'
 					)
 				),
@@ -1398,7 +1398,7 @@ $forum_page['group_count'] = $forum_page['item_count'] = 0;
 
 $query = array(
 	'SELECT'	=> 'g.g_id, g.g_title',
-	'FROM'		=> 'groups AS g',
+	'FROM'		=> '`groups` AS g',
 	'WHERE'		=> 'g.g_id!='.FORUM_GUEST,
 	'ORDER BY'	=> 'g.g_title'
 );

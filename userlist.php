@@ -161,7 +161,7 @@ ob_start();
 // Get the list of user groups (excluding the guest group)
 $query = array(
 	'SELECT'	=> 'g.g_id, g.g_title',
-	'FROM'		=> 'groups AS g',
+	'FROM'		=> '`groups` AS g',
 	'WHERE'		=> 'g.g_id!='.FORUM_GUEST,
 	'ORDER BY'	=> 'g.g_id'
 );
@@ -226,7 +226,7 @@ $query = array(
 	'FROM'		=> 'users AS u',
 	'JOINS'		=> array(
 		array(
-			'LEFT JOIN'		=> 'groups AS g',
+			'LEFT JOIN'		=> '`groups` AS g',
 			'ON'			=> 'g.g_id=u.group_id'
 		)
 	),

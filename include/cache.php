@@ -291,7 +291,7 @@ function generate_quickjump_cache($group_id = false)
 		// A group_id was not supplied, so we generate the quickjump cache for all groups
 		$query = array(
 			'SELECT'	=> 'g.g_id',
-			'FROM'		=> 'groups AS g'
+			'FROM'		=> '`groups` AS g'
 		);
 
 		($hook = get_hook('ch_fn_generate_quickjump_cache_qr_get_groups')) ? eval($hook) : null;

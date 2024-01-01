@@ -309,7 +309,7 @@ if (!empty($posts_id))
 				'ON'			=> 'u.id=p.poster_id'
 			),
 			array(
-				'INNER JOIN'	=> 'groups AS g',
+				'INNER JOIN'	=> '`groups` AS g',
 				'ON'			=> 'g.g_id=u.group_id'
 			),
 			array(

@@ -1390,7 +1390,7 @@ function authenticate_user($user, $password, $password_is_hash = false)
 		'FROM'		=> 'users AS u',
 		'JOINS'		=> array(
 			array(
-				'INNER JOIN'	=> 'groups AS g',
+				'INNER JOIN'	=> '`groups` AS g',
 				'ON'			=> 'g.g_id=u.group_id'
 			),
 			array(
@@ -1578,7 +1578,7 @@ function set_default_user()
 		'FROM'		=> 'users AS u',
 		'JOINS'		=> array(
 			array(
-				'INNER JOIN'	=> 'groups AS g',
+				'INNER JOIN'	=> '`groups` AS g',
 				'ON'			=> 'g.g_id=u.group_id'
 			),
 			array(

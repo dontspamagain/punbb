@@ -36,7 +36,7 @@ if (isset($_POST['add_group']) || isset($_GET['edit_group']))
 
 		$query = array(
 			'SELECT'	=> 'g.*',
-			'FROM'		=> 'groups AS g',
+			'FROM'		=> '`groups` AS g',
 			'WHERE'		=> 'g.g_id='.$base_group
 		);
 
@@ -56,7 +56,7 @@ if (isset($_POST['add_group']) || isset($_GET['edit_group']))
 
 		$query = array(
 			'SELECT'	=> 'g.*',
-			'FROM'		=> 'groups AS g',
+			'FROM'		=> '`groups` AS g',
 			'WHERE'		=> 'g.g_id='.$group_id
 		);
 
@@ -363,7 +363,7 @@ else if (isset($_POST['add_edit_group']))
 
 		$query = array(
 			'SELECT'	=> 'COUNT(g.g_id)',
-			'FROM'		=> 'groups AS g',
+			'FROM'		=> '`groups` AS g',
 			'WHERE'		=> 'g_title=\''.$forum_db->escape($title).'\''
 		);
 
@@ -421,7 +421,7 @@ else if (isset($_POST['add_edit_group']))
 
 		$query = array(
 			'SELECT'	=> 'COUNT(g.g_id)',
-			'FROM'		=> 'groups AS g',
+			'FROM'		=> '`groups` AS g',
 			'WHERE'		=> 'g_title=\''.$forum_db->escape($title).'\' AND g_id!='.$group_id
 		);
 
@@ -433,7 +433,7 @@ else if (isset($_POST['add_edit_group']))
 
 		// Save changes
 		$query = array(
-			'UPDATE'	=> 'groups',
+			'UPDATE'	=> '`groups`',
 			'SET'		=> 'g_title=\''.$forum_db->escape($title).'\', g_user_title='.$user_title.', g_moderator='.$moderator.', g_mod_edit_users='.$mod_edit_users.', g_mod_rename_users='.$mod_rename_users.', g_mod_change_passwords='.$mod_change_passwords.', g_mod_ban_users='.$mod_ban_users.', g_read_board='.$read_board.', g_view_users='.$view_users.', g_post_replies='.$post_replies.', g_post_topics='.$post_topics.', g_edit_posts='.$edit_posts.', g_delete_posts='.$delete_posts.', g_delete_topics='.$delete_topics.', g_set_title='.$set_title.', g_search='.$search.', g_search_users='.$search_users.', g_send_email='.$send_email.', g_post_flood='.$post_flood.', g_search_flood='.$search_flood.', g_email_flood='.$email_flood,
 			'WHERE'		=> 'g_id='.$group_id
 		);
@@ -475,7 +475,7 @@ else if (isset($_POST['set_default_group']))
 	// Make sure it's not a moderator group
 	$query = array(
 		'SELECT'	=> 'COUNT(g.g_id)',
-		'FROM'		=> 'groups AS g',
+		'FROM'		=> 'groups` AS g',
 		'WHERE'		=> 'g.g_id='.$group_id.' AND g.g_moderator=0',
 		'LIMIT'		=> '1'
 	);
@@ -531,7 +531,7 @@ else if (isset($_GET['del_group']))
 	// Check if this group has any members
 	$query = array(
 		'SELECT'	=> 'g.g_title AS title, COUNT(u.id) AS num_members',
-		'FROM'		=> 'groups AS g',
+		'FROM'		=> '`groups` AS g',
 		'JOINS'		=> array(
 			array(
 				'INNER JOIN'	=> 'users AS u',
@@ -725,7 +725,7 @@ ob_start();
 
 $query = array(
 	'SELECT'	=> 'g.g_id, g.g_title',
-	'FROM'		=> 'groups AS g',
+	'FROM'		=> '`groups` AS g',
 	'WHERE'		=> 'g_id>'.FORUM_GUEST,
 	'ORDER BY'	=> 'g.g_title'
 );
@@ -773,7 +773,7 @@ while ($cur_group = $forum_db->fetch_assoc($result))
 
 $query = array(
 	'SELECT'	=> 'g.g_id, g.g_title',
-	'FROM'		=> 'groups AS g',
+	'FROM'		=> '`groups` AS g',
 	'WHERE'		=> 'g_id>'.FORUM_GUEST.' AND g_moderator=0',
 	'ORDER BY'	=> 'g.g_title'
 );
@@ -818,7 +818,7 @@ while ($cur_group = $forum_db->fetch_assoc($result))
 
 $query = array(
 	'SELECT'	=> 'g.g_id, g.g_title',
-	'FROM'		=> 'groups AS g',
+	'FROM'		=> '`groups` AS g',
 	'ORDER BY'	=> 'g.g_title'
 );
 

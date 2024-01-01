@@ -40,7 +40,7 @@ $query = array(
 	'FROM'		=> 'users AS u',
 	'JOINS'		=> array(
 		array(
-			'LEFT JOIN'	=> 'groups AS g',
+			'LEFT JOIN'	=> '`groups` AS g',
 			'ON'		=> 'g.g_id=u.group_id'
 		)
 	),

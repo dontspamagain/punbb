@@ -66,9 +66,9 @@ foreach ($forum_rewrite_rules as $rule => $rewrite_to)
 
 				// We don't want to be overwriting values in $_REQUEST that were set in POST or COOKIE
 				if (!isset($_POST[$param_data[0]]) && !isset($_COOKIE[$param_data[0]]))
-					$_REQUEST[$param_data[0]] = urldecode($param_data[1]);
+					$_REQUEST[$param_data[0]] = urldecode($param_data[1] ?? '');
 
-				$_GET[$param_data[0]] = urldecode($param_data[1]);
+				$_GET[$param_data[0]] = urldecode($param_data[1] ?? '');
 			}
 		}
 		break;
